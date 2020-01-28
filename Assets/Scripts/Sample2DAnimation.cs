@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -12,6 +13,8 @@ public class Sample2DAnimation : MonoBehaviour
     private AnimationMixerPlayable _animationMixer;
     private AnimationClipPlayable _basePlayable, _overridePlayable;
 
+    private readonly LinkedList<int> _queuedIndexList = new LinkedList<int>();
+    
     public bool UseOverrideClips
     {
         private get => _useOverrideClips;
@@ -34,20 +37,12 @@ public class Sample2DAnimation : MonoBehaviour
         public string name = "";
         public AnimationClip baseClip = null, overrideClip = null;
     }
-
+    
     void Awake()
     {
+        // initialize graph
         _playableGraph = PlayableGraph.Create(name);
         AnimationPlayableOutput.Create(_playableGraph, name, GetComponent<Animator>());
-    }
-
-    void OnDestroy()
-    {
-       _playableGraph.Destroy(); 
-    }
-
-    void Start()
-    {
         _animationMixer = AnimationMixerPlayable.Create(_playableGraph, 2, true);
 
         var output = _playableGraph.GetOutput(0);
@@ -61,6 +56,28 @@ public class Sample2DAnimation : MonoBehaviour
         }
     }
 
+    void LateUpdate()
+    {
+        // 現在のクリップの再生が終わっている場合キューから次のものを再生
+        if (_queuedIndexList.First == null) return; 
+        
+        var watchTarget = _useOverrideClips ? 
+            _overridePlayable : _basePlayable;
+
+        var isDone = watchTarget.GetTime() >= watchTarget.GetAnimationClip().length - 0.01;
+        if (watchTarget.IsNull() || isDone)
+        {
+            Play(_queuedIndexList.First.Value);
+            _queuedIndexList.RemoveFirst();
+        }
+    }
+    
+    void OnDestroy()
+    {
+       _playableGraph.Destroy(); 
+    }
+
+    // ----- Play -----
     public void Play(string animationName)
     {
         var index = clipInfos.FindIndex((n) => n.name == animationName);
@@ -71,15 +88,29 @@ public class Sample2DAnimation : MonoBehaviour
     {
         DisconnectPlayables();
         
-        _basePlayable = AnimationClipPlayable.Create(_playableGraph, clipInfos[0].baseClip);
-        _overridePlayable = AnimationClipPlayable.Create(_playableGraph, clipInfos[0].overrideClip);
-            
+        _basePlayable = AnimationClipPlayable.Create(_playableGraph, clipInfos[index].baseClip);
+        _overridePlayable = AnimationClipPlayable.Create(_playableGraph, clipInfos[index].overrideClip);
+
         _animationMixer.ConnectInput(0, _overridePlayable, 0);
+        var overrideWeight = _useOverrideClips ? 1 : 0;
+        _animationMixer.SetInputWeight(0, overrideWeight);
 
         _animationMixer.ConnectInput(1, _basePlayable, 0);
         _animationMixer.SetInputWeight(1, 1);
     }
+    
+    public void PlayQueued(string animationName)
+    {
+        var index = clipInfos.FindIndex((n) => n.name == animationName);
+        PlayQueued(index);
+    }
 
+    public void PlayQueued(int index)
+    {
+        _queuedIndexList.AddLast(index); // 実際の処理は LateUpdate で
+    }
+
+    // ----- Util -----
     void DisconnectPlayables()
     {
         _playableGraph.Disconnect(_animationMixer, 0);

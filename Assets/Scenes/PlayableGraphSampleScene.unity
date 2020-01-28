@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 1420602999}
   - component: {fileID: 1420602998}
   - component: {fileID: 1420602995}
+  - component: {fileID: 1420603002}
   m_Layer: 0
   m_Name: "\u30E6\u30CB\u30C6\u30A3\u3061\u3083\u3093"
   m_TagString: Untagged
@@ -239,9 +240,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clipInfos:
-  - name: 
+  - name: Stand
     baseClip: {fileID: 7400000, guid: 4389f6e1168d644daa7620850c0c3b68, type: 2}
     overrideClip: {fileID: 7400000, guid: a1cc279f407854228bfc4be4b2cd4022, type: 2}
+  - name: JumpStart
+    baseClip: {fileID: 7400000, guid: 68ccac32ff21f49b89a815e58079203f, type: 2}
+    overrideClip: {fileID: 7400000, guid: 6656b5c83c50f49a7b1db5898cf1bc11, type: 2}
+  - name: Jump
+    baseClip: {fileID: 7400000, guid: 6df226dbafa7849369ab4785e85466d5, type: 2}
+    overrideClip: {fileID: 7400000, guid: e9928e10dfe4f4aeda61010903cf59cc, type: 2}
+  - name: DownStart
+    baseClip: {fileID: 7400000, guid: 0f74539ea9b5d4d9e9294014fb64081d, type: 2}
+    overrideClip: {fileID: 7400000, guid: b6d9f921be33a4c74870512377296056, type: 2}
+  - name: Down
+    baseClip: {fileID: 7400000, guid: 4b7a3a0b04b9644998d03c8cd1c343cd, type: 2}
+    overrideClip: {fileID: 7400000, guid: e569ff4b008f44c049540e9dce0437e1, type: 2}
+  - name: Grounded
+    baseClip: {fileID: 7400000, guid: 8ba7e9ef33ca94867972881c5ac76f59, type: 2}
+    overrideClip: {fileID: 7400000, guid: 65d203f6954654694bb451979972ffd9, type: 2}
+  - name: Run
+    baseClip: {fileID: 7400000, guid: 2c7b421d9eef6490f83e25df09665b99, type: 2}
+    overrideClip: {fileID: 7400000, guid: 30386ea84934944d091c34a9516e5ef5, type: 2}
 --- !u!212 &1420602996
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -388,6 +407,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1616927, y: 1.5818617}
   m_EdgeRadius: 0
+--- !u!114 &1420603002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420602994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138963a6c2ca843ca89f7fba321d10db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1631794796
 GameObject:
   m_ObjectHideFlags: 0
