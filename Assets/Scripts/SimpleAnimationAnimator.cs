@@ -47,7 +47,7 @@ public class SimpleAnimationAnimator : MonoBehaviour
 
     void Update()
     {
-        if (_shootTimer < 0f && _controller.FireTriggered)
+        if (_controller.FireTriggered)
             _shootTimer = 0f;
         
         if (!(_shootTimer >= 0f)) return;

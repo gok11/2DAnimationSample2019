@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -64,7 +63,7 @@ public class Sample2DAnimation : MonoBehaviour
         var watchTarget = _useOverrideClips ? 
             _overridePlayable : _basePlayable;
 
-        var isDone = watchTarget.GetTime() >= watchTarget.GetAnimationClip().length - 0.01;
+        var isDone = watchTarget.GetTime() >= watchTarget.GetAnimationClip().length;
         if (watchTarget.IsNull() || isDone)
         {
             Play(_queuedIndexList.First.Value);
