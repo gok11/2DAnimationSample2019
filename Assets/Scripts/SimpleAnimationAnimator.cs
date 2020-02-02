@@ -24,8 +24,14 @@ public class SimpleAnimationAnimator : MonoBehaviour
     private const string GroundedStateName = "Grounded";
     private const string RunStateName = "Run";
 
-    private float animationTimer = 0f;
+    private const string RunShootStateName = "RunShoot";
     
+    private float animationTimer = 0f;
+    private float _shootTimer = -1f;
+    private float _shootTime = 0.5f;
+    
+    private float ShootWeight => _shootTimer >= 0f && _shootTimer <= _shootTime ? 1f : 0f;
+
     void Awake()
     {
         _simpleAnimation = GetComponent<SimpleAnimation>();
@@ -37,6 +43,18 @@ public class SimpleAnimationAnimator : MonoBehaviour
     void Start()
     {
         _animationFsm.ChangeState(AnimState.Stand);
+    }
+
+    void Update()
+    {
+        if (_shootTimer < 0f && _controller.FireTriggered)
+            _shootTimer = 0f;
+        
+        if (!(_shootTimer >= 0f)) return;
+        
+        _shootTimer += Time.deltaTime;
+        if (_shootTimer >= _shootTime)
+            _shootTimer = -1f;
     }
 
     void LateUpdate()
@@ -113,10 +131,15 @@ public class SimpleAnimationAnimator : MonoBehaviour
     void Run_Enter()
     {
         _simpleAnimation.Play(RunStateName);
+        _simpleAnimation.GetState(RunStateName).weight = 1 - ShootWeight;
+        _simpleAnimation.Blend(RunShootStateName, ShootWeight, 0f);
     }
     
     void Run_Update()
     {
+        _simpleAnimation.GetState(RunStateName).weight = 1 - ShootWeight;
+        _simpleAnimation.GetState(RunShootStateName).weight = ShootWeight;
+        
         if (_controller.JumpTriggered)
         {
             _animationFsm.ChangeState(AnimState.Jump);

@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
+  m_AnimatePhysics: 1
   m_CullingMode: 1
   m_WrapMode: 0
   m_Clip: {fileID: 7400000, guid: 4389f6e1168d644daa7620850c0c3b68, type: 2}
@@ -265,6 +265,9 @@ MonoBehaviour:
     defaultState: 0
   - clip: {fileID: 7400000, guid: 2c7b421d9eef6490f83e25df09665b99, type: 2}
     name: Run
+    defaultState: 0
+  - clip: {fileID: 7400000, guid: 30386ea84934944d091c34a9516e5ef5, type: 2}
+    name: RunShoot
     defaultState: 0
 --- !u!212 &1420602996
 SpriteRenderer:
@@ -343,7 +346,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 0}
   m_CullingMode: 1
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
